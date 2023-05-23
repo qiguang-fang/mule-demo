@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="c1fe26d5-d10c-4bac-8bad-0091dafc6464" >
+		<wsc:connection wsdlLocation="api\NumberConversion.wsdl" service="NumberConversion" port="NumberConversionSoap" address="https://www.dataaccess.com/webservicesserver/NumberConversion.wso" />
+	</wsc:config>
+	<flow name="soap-api-example" doc:id="0509b281-9cee-4c24-b1a1-a5d2ee0db67c" >
+		<scheduler doc:name="Scheduler" doc:id="0e7c1354-d4c7-47db-9ebe-6218e6c7c965" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="30" timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<set-variable value="#[200]" doc:name="ubiNum設定" doc:id="8e95b8fe-4dd1-4d92-8cbc-39ed06adf010" variableName="ubiNum"/>
+		<ee:transform doc:name="SOAPボディ設定" doc:id="29c884fe-ef8b-4195-8290-995b53494a8d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns con http://www.dataaccess.com/webservicesserver/
+---
+con#NumberToWords: {
+   ubiNum: vars.ubiNum
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="NumberToWords" doc:name="SOAP APIの呼び出し" doc:id="ba86ff54-a86e-49ab-8cd6-03d94043b90d" config-ref="Web_Service_Consumer_Config">
+			<wsc:addressing wsaTo="https://www.dataaccess.com/webservicesserver/NumberConversion.wso" wsaAction="https://www.dataaccess.com/webservicesserver/NumberConversion.wso/NumberConversionSoap/NumberToWordsRequest"/>
+		</wsc:consume>
+		<logger level="INFO" doc:name="レスポンスの出力" doc:id="3d64b17f-99ed-417f-b253-d299830e4e31" message='#[payload]'/>
+	</flow>
+</mule>
