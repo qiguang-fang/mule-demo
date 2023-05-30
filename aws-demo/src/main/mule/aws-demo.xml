@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:s3="http://www.mulesoft.org/schema/mule/s3" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/s3 http://www.mulesoft.org/schema/mule/s3/current/mule-s3.xsd">
+	<s3:config name="Amazon_S3_Configuration" doc:name="Amazon S3 Configuration" doc:id="5a7573f7-63a2-42fa-b4c5-046b7d53d586" >
+		<s3:connection region="ap-northeast-1" accessKey="access_key" secretKey="secret_key" />
+	</s3:config>
+	<flow name="aws-demo-flow" doc:id="ba8ff01f-37e0-485b-9378-a98349aa8a8a" >
+		<scheduler doc:name="Start" doc:id="c0e80ba0-c6f9-4e95-8878-7912eba8dad8" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="30" timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Start logger" doc:id="ca944627-254f-4626-b7be-e9a0566d45af" message="#[payload]"/>
+		<s3:get-object doc:name="Read csv from s3" doc:id="0fc3dff4-ac3f-4e3a-93f2-a51865153290" config-ref="Amazon_S3_Configuration" bucketName="bucket_name" key="csv_name"/>
+		<logger level="INFO" doc:name="End logger" doc:id="cc0822c4-cff9-4bdc-a096-e5c521720e2d" message="#[payload]"/>
+	</flow>
+</mule>
