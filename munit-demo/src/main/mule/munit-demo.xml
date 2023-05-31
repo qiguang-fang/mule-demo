@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ce794cee-56c5-49d2-b0bf-60476108b1a8" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="327f9627-0731-4866-a2a9-092b772c6b55" >
+		<http:request-connection host="177.0.0.1" port="8081" />
+	</http:request-config>
+	<flow name="munit-demo-flow" doc:id="ae235a1a-7f6a-4fcf-a96f-3335d03142c4" >
+		<http:listener doc:name="Listener" doc:id="77aa7787-613b-47fe-ae47-72169d58afb7" config-ref="HTTP_Listener_config" path="/api"/>
+		<logger level="INFO" doc:name="Logger" doc:id="7fe85c45-9b32-4d59-8f8b-7b40d2b06982" />
+		<http:request method="GET" doc:name="Request" doc:id="cd4d48a5-16b5-4532-83d4-5109372d36cc" config-ref="HTTP_Request_configuration" path="/"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="0ae703f0-536e-4788-8aff-0a63b2aa56b0" />
+		<logger level="INFO" doc:name="Logger" doc:id="6b0e038c-ada3-43c7-8a98-da84396d7c34" />
+	</flow>
+</mule>
