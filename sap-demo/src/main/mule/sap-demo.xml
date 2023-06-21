@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sap="http://www.mulesoft.org/schema/mule/sap" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd">
+	<sap:sap-config name="SAP_Config" doc:name="SAP Config" doc:id="5927c50e-d0f0-41b3-91fe-1c9eeed0a023" >
+		<sap:simple-connection-provider-connection username="sapconnect" password="password" systemNumber="00" client="800" applicationServerHost="128.4.88.9" />
+	</sap:sap-config>
+	<flow name="sap-demo-flow" doc:id="a9bdef33-73b5-4896-8f46-0ee6223f45d1" >
+		<scheduler doc:name="Scheduler" doc:id="06c25efb-7006-460c-9958-1a9bdf8142ee" >
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="41848030-3f65-4dab-925c-47123c31e141" message="start retrieve-------------"/>
+		<sap:retrieve-idoc doc:name="Retrieve IDoc" doc:id="0eb09911-9f52-499d-a297-7154b1f1604a" config-ref="SAP_Config" key="MATMAS01"/>
+		<logger level="INFO" doc:name="Logger" doc:id="0cf87bb2-22aa-4076-9f98-80516c332224" message="#[payload]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="7cd6652e-942c-416a-a6c5-c109b8c6e8ac" message="end retrieve-------------"/>
+	</flow>
+</mule>
