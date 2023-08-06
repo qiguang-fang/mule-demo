@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ef2193cd-4698-4941-8342-c89bff186a67" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="choice-demoFlow" doc:id="b3f17938-e96c-4647-9279-e29a990a85a3" >
+		<http:listener doc:name="Listener" doc:id="2c2aef5e-5dcb-432b-894e-9345fd4d3afa" config-ref="HTTP_Listener_config" path="/"/>
+		<logger level="INFO" doc:name="Query Param Logger" doc:id="3b89dd38-7eec-4047-b4fa-e61483dc7191" message='#["query param is: " ++ attributes.queryParams.id]'/>
+		<choice doc:name="Choice" doc:id="9ff96a30-7324-49e0-994f-c58ec60dc815" >
+			<when expression='#[attributes.queryParams.id == "1"]'>
+				<set-payload value="1" doc:name="Set Result 1" doc:id="1a29a7d9-10b3-4c75-b1a1-e36a92ac1f0b" />
+			</when>
+			<otherwise >
+				<set-payload value="2" doc:name="Set Result 2" doc:id="794c4cc3-4817-4073-9f19-abe508ad1bb4" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Result Logger" doc:id="61c53108-448c-49f8-a55f-ca650f427406" message="#[payload]"/>
+	</flow>
+</mule>
