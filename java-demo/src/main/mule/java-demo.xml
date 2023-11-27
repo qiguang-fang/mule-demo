@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0219b1ec-fc60-4ca9-a5c0-e8712267bdd6" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="java-demoFlow" doc:id="f09f0c79-f40e-4eb4-9a76-dad0589f5ef2" >
+		<http:listener doc:name="Listener" doc:id="ece469bd-24c0-4c96-a3d0-6b620376b093" config-ref="HTTP_Listener_config" path="/java/demo"/>
+		<logger level="INFO" doc:name="Logger" doc:id="24be7df2-9730-4870-9605-3a215d623ee8" />
+		<java:new constructor="HelloWorld()" doc:name="New" doc:id="7c39438f-1f70-487e-a47f-155850d54a9f" class="HelloWorld" target="helloWorld"/>
+		<java:invoke doc:name="Invoke" doc:id="8cec24ab-d037-4bec-8b44-91d7103a0ccc" class="HelloWorld" method="printHelloWorld()" instance="#[vars.helloWorld]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="4b8d5d68-63e3-4306-bb01-6be4da296c80" />
+	</flow>
+</mule>
