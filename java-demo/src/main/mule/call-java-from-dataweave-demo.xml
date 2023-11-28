@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="call-java-from-dataweave-demoFlow" doc:id="13177d05-2f7b-4afa-ac4c-edb2cd4fa5f3" >
+		<http:listener doc:name="Listener" doc:id="c797cf19-27dc-430e-81db-d8e0bf54bcd8" config-ref="HTTP_Listener_config" path="/dataweave/demo"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d2722fd3-9871-4625-b305-d36a68932cd1" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="816c6e44-481d-4271-9d6f-23fc5fb08d02" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import java!MyUtils
+output application/json
+---
+{
+	"random-number": MyUtils::appendRandom("myString")
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="e779ab7d-ab9d-4b18-a711-6dd8bd309ba0" message="#[payload]"/>
+	</flow>
+</mule>
