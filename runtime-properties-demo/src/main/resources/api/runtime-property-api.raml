@@ -1,0 +1,17 @@
+#%RAML 1.0
+title: Runtime Property API
+
+/property:
+ get:
+    queryParameters:
+     propertyName:
+      type: string
+      required: true
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              {
+                property: dev
+              }
