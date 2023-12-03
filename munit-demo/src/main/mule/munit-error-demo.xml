@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="e6c351b8-37b0-49f5-8955-c8426d0e11f9" >
+		<http:request-connection host="0.0" port="433" >
+		</http:request-connection>
+	</http:request-config>
+	<flow name="munit-error-demoFlow" doc:id="b4f02f56-57a4-4b7f-983d-eaf76fd6c780" >
+		<http:listener doc:name="Listener" doc:id="73a9fe26-bcd1-4c08-8ed4-2fd6d28c1598" config-ref="HTTP_Listener_config" path="/api/munit/error/demo"/>
+		<logger level="INFO" doc:name="Logger" doc:id="6c7a307c-33a5-4c68-a12f-755c2940bd7e" />
+		<try doc:name="Try" doc:id="595e538b-185c-4ae1-a176-b9d1607daef7" >
+			<http:request method="POST" doc:name="Request" doc:id="8d815af6-7d5f-4de0-86a0-4c01b541972e" config-ref="HTTP_Request_configuration1" path="/"/>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="a1c2f840-9b29-451e-8f65-009259de1683" >
+					<set-payload value='#["On error continue"]' doc:name="Set Payload" doc:id="fb7de90a-a0f8-4058-af45-7962a01198a8" />
+				</on-error-continue>
+			</error-handler>
+		</try>
+		<logger level="INFO" doc:name="Logger" doc:id="f8392dd5-c6bf-4c32-82f9-d4543f3fc5c6" />
+	</flow>
+</mule>
